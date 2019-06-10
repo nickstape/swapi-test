@@ -1,0 +1,17 @@
+@import '../../styles/sass/breakpoints';
+@import '../../styles/sass/colors';
+.logo {
+  margin: 20px 20px;
+  width: 200px;
+  max-width: 50%;
+  height: auto;
+  fill: $base-color;
+  align-self: center;
+
+
+  @media screen and (min-width: $laptop) {
+    margin-top: 100px;
+    width: 400px;
+    margin-left: 470px;
+  }
+}
