@@ -39,15 +39,10 @@ class Swapis extends React.Component {
         }
         componentWillMount() {
           axios
-            .get(`/api/swapi/${this.props.kind}`)
+            .get(`https://swapi.co/api/swapi/${this.props.kind}`)
             .then(response => {const swapis = response.data.results;
                                this.setState({ swapis });
                              })
-
-          // Native Alternative to Axios
-        //   fetch(`/api/swapi/${this.props.kind}`)
-        //     .then(response => response.json())
-        //     .then(response => this.setState({swapis: response.results}));
         }
         getSwapiData(index, event) {
           event.preventDefault();
