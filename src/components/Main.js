@@ -1,13 +1,16 @@
 import React from 'react';
-// import Planets from "./Planets";
-// import Persons  from "./Persons";
-// import Starship from "./Starships";
+
+import { Modal, Button } from "react-bootstrap";
 
 //import images
 import Logo from '../images/Logo';
-const Button = ReactBootstrap.Button;
-const Modal = ReactBootstrap.Modal;
-const swapiKeys = ['people', 'planets', 'species', 'vehicles', 'starships', 'films'];
+
+//stylesheet
+import "../styles/sass/main.scss";
+
+import axios from 'axios';
+
+const swapiKeys = ['people', 'planets', 'starships'];
 
 function getKeys(o) {
         let keys = [];
@@ -37,13 +40,14 @@ class Swapis extends React.Component {
         componentWillMount() {
           axios
             .get(`/api/swapi/${this.props.kind}`)
-            .catch(error => console.error(error))
-            .then(response => this.setState({swapis: response.data.results}));
+            .then(response => {const swapis = response.data.results;
+                               this.setState({ swapis });
+                             })
 
           // Native Alternative to Axios
-          // fetch(`/api/swapi/${this.props.kind}`)
-          //   .then(response => response.json())
-          //   .then(response => this.setState({swapis: response.results}));
+        //   fetch(`/api/swapi/${this.props.kind}`)
+        //     .then(response => response.json())
+        //     .then(response => this.setState({swapis: response.results}));
         }
         getSwapiData(index, event) {
           event.preventDefault();
@@ -88,16 +92,16 @@ class Swapis extends React.Component {
               <ul className="list-group">
                 {this.state.swapis.map((swapi, index) => {
                   return (
-                    <a href="#" key={index} onClick={this.getSwapiData.bind(this, index)}>
+                    <a href="/" key={index} onClick={this.getSwapiData.bind(this, index)}>
                       <Swapi index={index} name={swapi.name || swapi.title}/>
                     </a>
                   )
                 })}
               </ul>
-              <BootstrapModal show={this.state.showModal}
-                              name={this.state.swapi.name || this.state.swapi.title}>
-                {this.state.swapi}
-              </BootstrapModal>
+              <Modal show={this.state.showModal}
+                     name={this.state.swapi.name || this.state.swapi.title}>
+              {this.state.swapi}
+              </Modal>
             </div>
           );
         }
