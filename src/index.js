@@ -4,8 +4,11 @@ import { Provider } from 'react-redux';
 import store from './store';
 import './index.css';
 
-
+//
 import Router from "./components/Router";
+//
+// import People from "./components/people/People";
+
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(

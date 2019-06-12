@@ -1,34 +1,19 @@
+$body-bg: #ffffff;
+$card-bg: #000;
+$base-color: #000;
+$highlight-color: #d8d499;
+$body-font: 'Open Sans Condensed', sans-serif;
+$header-font: 'Josefin Slab', serif;
+$body-font-size: 16px;
 
 *{
   box-sizing: border-box;
 }
 
 body {
-  font-family: helvetica, arial, sans-serif;
+  font-family: $header-font;
   margin: 25px;
-}
-
-h1 {
-  font-weight: bold;
-  color: pink;
-}
-
-.bold {
-  font-weight: bold;
-}
-
-p {
-  max-width: 600px;
-}
-
-form {
-  margin-bottom: 25px;
-  padding: 15px;
-  background-color: cyan;
-  display: inline-block;
-  width: 100%;
-  max-width: 340px;
-  border-radius: 3px;
+  background-color: $highlight-color;
 }
 
 input {
@@ -42,36 +27,30 @@ input {
 }
 
 button {
-  font-size: 16px;
-  border-radius: 3px;
-  background-color: lightgrey;
-  border: 1px solid grey;
-  box-shadow: 2px 2px teal;
+  font-size: $body-font-size;
   cursor: pointer;
+  button:hover {
+    background-color: yellow;
+  }
+  button:active {
+    box-shadow: none;
+  }
 }
 
-button:hover {
-  background-color: yellow;
-}
+.card-deck{
+  justify-content: center;
+  .card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 40%;
+  }
 
-button:active {
-  box-shadow: none;
+  .card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  }
 }
+.tagline{
+  margin-top: 250px;
+  text-align: center;
 
-li {
-  margin-bottom: 5px;
-}
-
-footer {
-  margin-top: 50px;
-  padding-top: 25px;
-  border-top: 1px solid lightgrey;
-}
-
-footer > a {
-  color: #BBBBBB;
-}
-
-.nicejob {
-  text-decoration: line-through;
 }
