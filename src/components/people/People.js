@@ -43,8 +43,8 @@ class People extends React.Component{
               </InputGroup>
           </div>
             {people.count ?
-         <div className="table-body">
-           <Table id='people'>
+         <div>
+           <Table  responsive striped bordered hover>
              <thead>
                <tr>
                  <th>Id</th>
