@@ -7,13 +7,14 @@ import { getPlanets } from './planets/planetThunk';
 import { getStarships } from './starships/starshipThunk';
 
 //import components
-import { Card, Button, CardDeck } from "react-bootstrap";
+import { Card, Button, CardColumns } from "react-bootstrap";
 
 //import images
 import Logo from '../images/Logo';
 
 //stylesheet
 import "../styles/sass/main.scss";
+import "../styles/sass/breakpoints.scss";
 
 class Main extends React.Component{
   constructor(props) {
@@ -32,28 +33,26 @@ class Main extends React.Component{
            <header className="header">
               <Logo />
           </header>
-          <div>
-          <CardDeck className="row">
-               <Card bg="info" className="col-lg-4">
+          <CardColumns>
+               <Card bg="info">
                  <Card.Body>
                     <Card.Title>People</Card.Title>
-                    <Button variant="primary" onClick={() => getPeople()} >Go somewhere</Button>
+                    <Button className="btn-style" onClick={() => getPeople()} >Go somewhere</Button>
                  </Card.Body>
               </Card>
-               <Card bg="danger" className="col-lg-4 col-xs-6">
+               <Card bg="danger">
               <Card.Body>
                 <Card.Title>Planets</Card.Title>
-                 <Button variant="primary" onClick={() => getPlanets()}>Go somewhere</Button>
+                 <Button className="btn-style" onClick={() => getPlanets()}>Go somewhere</Button>
               </Card.Body>
              </Card>
-             <Card bg="warning" className="col-lg-4 col-sm-6">
+             <Card bg="warning">
               <Card.Body>
                 <Card.Title>Starships</Card.Title>
-                 <Button variant="primary" onClick={() => getStarships()}>Go somewhere</Button>
+                 <Button className="btn-style" onClick={() => getStarships()}>Go somewhere</Button>
               </Card.Body>
              </Card>
-          </CardDeck>
-          </div>
+          </CardColumns>
          <div className="tagline">
             Built and designed for Front-end Developer Test <a href="www.https://github.com/random-guys/swapi-frontend-developer-test/">on Github</a>,
             <a href="https://swapi.co/">using the starwars Api.</a>.

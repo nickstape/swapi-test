@@ -1,56 +1,79 @@
+@import './breakpoints';
 $body-bg: #ffffff;
 $card-bg: #000;
 $base-color: #000;
 $highlight-color: #d8d499;
-$body-font: 'Open Sans Condensed', sans-serif;
 $header-font: 'Josefin Slab', serif;
 $body-font-size: 16px;
 
-*{
-  box-sizing: border-box;
-}
 
 body {
   font-family: $header-font;
-  margin: 25px;
   background-color: $highlight-color;
 }
 
-input {
-  display: block;
-  margin-bottom: 10px;
-  padding: 5px;
-  width: 100%;
-  border: 1px solid lightgrey;
-  border-radius: 3px;
-  font-size: 16px;
-}
-
-button {
+.btn-style{
   font-size: $body-font-size;
   cursor: pointer;
-  button:hover {
-    background-color: yellow;
+  background-color: white;
+  color: black;
+  .btn-style:hover {
+    background-color: blue;
   }
-  button:active {
+  .btn-style:active {
     box-shadow: none;
   }
 }
 
-.card-deck{
+.card-columns{
   justify-content: center;
   .card {
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    transition: 0.3s;
-    width: 40%;
-  }
 
+      -webkit-animation: slide-in-elliptic-top-fwd 0.7s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+      animation: slide-in-elliptic-top-fwd 0.7s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+
+  }
   .card:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
   }
 }
+
+@-webkit-keyframes slide-in-elliptic-top-fwd {
+  0% {
+    -webkit-transform: translateY(-600px) rotateX(-30deg) scale(0);
+            transform: translateY(-600px) rotateX(-30deg) scale(0);
+    -webkit-transform-origin: 50% 100%;
+            transform-origin: 50% 100%;
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0) rotateX(0) scale(1);
+            transform: translateY(0) rotateX(0) scale(1);
+    -webkit-transform-origin: 50% 1400px;
+            transform-origin: 50% 1400px;
+    opacity: 1;
+  }
+}
+@keyframes slide-in-elliptic-top-fwd {
+  0% {
+    -webkit-transform: translateY(-600px) rotateX(-30deg) scale(0);
+            transform: translateY(-600px) rotateX(-30deg) scale(0);
+    -webkit-transform-origin: 50% 100%;
+            transform-origin: 50% 100%;
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0) rotateX(0) scale(1);
+            transform: translateY(0) rotateX(0) scale(1);
+    -webkit-transform-origin: 50% 1400px;
+            transform-origin: 50% 1400px;
+    opacity: 1;
+  }
+}
+/* Media queries for card */
+
 .tagline{
-  margin-top: 250px;
+  margin-top: 100px;
   text-align: center;
 
 }

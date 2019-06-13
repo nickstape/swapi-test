@@ -1,3 +1,10 @@
-$laptop: 768px;
-$desktop: 1024px;
-$large-desktop: 1920px;
+$phone: 320px;
+$ipad: 768px;
+$desktop: 1280px;
+$large-desktop: 1400px;
+$breakpoints: (
+  'xsmall' : 320px,
+  'small'  : 767px,
+  'medium' : 992px,
+  'large'  : 1200px
+);
