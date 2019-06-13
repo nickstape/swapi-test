@@ -6,7 +6,8 @@ export const getPeople = () => {
     dispatch(actions.getPeople());
     request.getPeople().then((response) => {
       console.log("success", response);
-      dispatch(actions.getPeopleSuccess(response));
+      if(response.status = 200 )
+        dispatch(actions.getPeopleSuccess(response.data));
     }).catch((error) => {
       console.log("error", error);
       dispatch(actions.getPeopleFailure(error))

@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom'
 
 //actions
-import { getPeople } from './people/peopleThunk';
 import { getPlanets } from './planets/planetThunk';
 import { getStarships } from './starships/starshipThunk';
 
@@ -21,11 +21,21 @@ class Main extends React.Component{
    super(props);
    this.state = {
       showInfo: false,
+      redirect: false,
    }
  }
+   setRedirect = () => {
+    this.setState({
+      redirect: true
+    })
+  }
 
+ renderRedirect = () => {
+     if (this.state.redirect) {
+       return <Redirect to='/people' />
+     }
+   }
   render(){
-    const { getPeople } = this.props;
     const { getPlanets } = this.props;
     const { getStarships } = this.props;
     return(
@@ -37,7 +47,10 @@ class Main extends React.Component{
                <Card bg="info">
                  <Card.Body>
                     <Card.Title>People</Card.Title>
-                    <Button className="btn-style" onClick={() => getPeople()} >Go somewhere</Button>
+                    {this.renderRedirect()}
+                    <Button className="btn-style ui animated button" onClick={this.setRedirect}>
+                     Go somewhere
+                     </Button>
                  </Card.Body>
               </Card>
                <Card bg="danger">
@@ -70,7 +83,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getPeople: () => dispatch(getPeople()),
     getPlanets: () => dispatch(getPlanets()),
     getStarships: () => dispatch(getStarships()),
   }

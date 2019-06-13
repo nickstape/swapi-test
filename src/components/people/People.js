@@ -1,65 +1,84 @@
 import React from "react";
 //import components
-import {  Table } from "react-bootstrap";
+import { connect } from 'react-redux';
+import {  Table, InputGroup, FormControl } from "react-bootstrap";
 import { getPeople } from './peopleThunk';
-import { fetchItemsIfNeeded } from './peopleActions';
-import Search from '../components/Search';
+
+
 
 class People extends React.Component{
   constructor(props) {
-      super(props) //since we are extending class Table so we have to use super in order to override Component class constructor
+      super(props)
       this.state = { //state is by default an object
-         people: [
-           {getPeople}
-         ]
+         people: false,
+
       }
-   }
-   renderTableHeader() {
-         let header = Object.keys(this.state.people[0])
-         return header.map((key, index) => {
-            return <thread key={index}>{key}</thread>
-         })
-      }
+    }
+
+    componentDidMount = () => {
+      const { getPeople } = this.props;
+      getPeople();
+    }
     renderTableData() {
-      return this.state.people.map((people, index) => {
-         const { id, fullname, birthyear, gender } = people //destructuring
+      return this.props.people.results.map((person, index) => {
+         const { id, name, birth_year, gender } = person //destructuring
          return (
             <tr key={id}>
                <td>{id}</td>
-               <td>{fullname}</td>
-               <td>{birthyear}</td>
+               <td>{name}</td>
+               <td>{birth_year}</td>
                <td>{gender}</td>
             </tr>
          )
       })
    }
-   componentDidMount() {
-   const { dispatch, searchStr } = this.props;
-   dispatch(fetchItemsIfNeeded(searchStr));
- }
-
- handleChange(searchStr) {
-   this.props.dispatch(fetchItemsIfNeeded(searchStr));
- }
   render(){
+    const  { people } = this.props;
+    console.log("people", people);
     return(
      <div>
-      <Search value={searchStr} onChange={this.handleChange} />
-       <Table id='people'>
-         <thead>
-           <tr>
-             {this.renderTableHeader()}
-           </tr>
-         </thead>
-         <tbody>
-          <tr>
-           {this.renderTableData()}
-          </tr>
-         </tbody>
-       </Table>
+          <div>
+                <InputGroup className="mb-3">
+                  <FormControl placeholder="Search By" aria-describedby="basic-addon1"/>
+              </InputGroup>
+          </div>
+            {people.count ?
+         <div className="table-body">
+           <Table id='people'>
+             <thead>
+               <tr>
+                 <th>Id</th>
+                 <th>FullName</th>
+                 <th>Birth Year</th>
+                 <th>Gender</th>
+               </tr>
+            </thead>
+            <tbody>
+              <tr>
+              {this.renderTableData()}
+              </tr>
+           </tbody>
+           </Table>
+       </div>
+       :
+       <p>loading</p>
+     }
      </div>
     );
   }
 }
+const mapStateToProps = (state) => {
+  console.log("state", state);
+  return {
+    loading: state.reducer.loading,
+    people: state.reducer.people,
+  }
+}
 
-export default People;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getPeople: () => dispatch(getPeople()),
+
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(People);

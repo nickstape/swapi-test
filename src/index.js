@@ -6,14 +6,14 @@ import './index.css';
 
 //
 import Router from "./components/Router";
-//
-// import People from "./components/people/People";
+
+
 
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router />
+    <Router/>
   </Provider>,
   document.getElementById('root'));
 
