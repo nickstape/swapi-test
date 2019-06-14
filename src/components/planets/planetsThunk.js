@@ -6,7 +6,8 @@ export const getPlanets = () => {
     dispatch(actions.getPlanets());
     request.getPlanets().then((response) => {
       console.log("success", response);
-      dispatch(actions.getPlanetsSuccess(response));
+      if(response.status = 200 )
+        dispatch(actions.getPlanetsSuccess(response.data));
     }).catch((error) => {
       console.log("error", error);
       dispatch(actions.getPlanetsFailure(error))

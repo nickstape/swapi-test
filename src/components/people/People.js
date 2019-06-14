@@ -4,7 +4,14 @@ import { connect } from 'react-redux';
 import {  Table, InputGroup, FormControl } from "react-bootstrap";
 import { getPeople } from './peopleThunk';
 
+import Spinner from '../../components/Spinner';
 
+//stylesheet
+import "../../styles/sass/body.scss";
+
+function cellFormatter(cell) {
+    return (!cell ? <Spinner /> : `${cell}`);
+}
 
 class People extends React.Component{
   constructor(props) {
@@ -12,54 +19,75 @@ class People extends React.Component{
       this.state = { //state is by default an object
          people: false,
 
+
       }
     }
 
-    componentDidMount = () => {
+  componentDidMount = () => {
       const { getPeople } = this.props;
       getPeople();
     }
-    renderTableData() {
-      return this.props.people.results.map((person, index) => {
-         const { id, name, birth_year, gender } = person //destructuring
-         return (
-            <tr key={id}>
-               <td>{id}</td>
-               <td>{name}</td>
-               <td>{birth_year}</td>
-               <td>{gender}</td>
+  keyPress(e){
+    if(e.keyCode === "enter"){
+         this.setState({
+             loading: true
+         });
+         this.setState({
+             searchQuery:e.target.value
+         })
+  };
+}
+
+
+
+
+
+
+  renderTableData() {
+    if(this.props.people.results.length > 0)
+      return this.props.people.results.map((person, data) => {
+          const { id, name, birth_year, gender } = person //destructuring
+          return (
+            <tr key={data}>
+               <td>{person.id}</td>
+               <td>{person.name}</td>
+               <td>{person.birth_year}</td>
+               <td>{person.gender}</td>
             </tr>
          )
-      })
-   }
+        })
+    }
+
+
+
   render(){
     const  { people } = this.props;
-    console.log("people", people);
+
+
     return(
-     <div>
-          <div>
-                <InputGroup className="mb-3">
+     <div className="container">
+          <div className="search-bar">
+                <InputGroup className="mb-3" onKeyDown={(e)=>{this.keyPress(e)}}>
                   <FormControl placeholder="Search By" aria-describedby="basic-addon1"/>
               </InputGroup>
           </div>
             {people.count ?
-         <div>
-           <Table  responsive striped bordered hover>
-             <thead>
+         <div className="body-container">
+           <Table responsive  bordered hover>
+             <thead >
                <tr>
                  <th>Id</th>
                  <th>FullName</th>
                  <th>Birth Year</th>
                  <th>Gender</th>
                </tr>
-            </thead>
-            <tbody>
-              <tr>
-              {this.renderTableData()}
-              </tr>
-           </tbody>
+               </thead>
+               <tbody>
+               {this.renderTableData()}
+               </tbody>
            </Table>
-       </div>
+
+         </div>
        :
        <p>loading</p>
      }
@@ -68,7 +96,6 @@ class People extends React.Component{
   }
 }
 const mapStateToProps = (state) => {
-  console.log("state", state);
   return {
     loading: state.reducer.loading,
     people: state.reducer.people,

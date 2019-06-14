@@ -1,10 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom'
 
-//actions
-import { getPlanets } from './planets/planetThunk';
-import { getStarships } from './starships/starshipThunk';
 
 //import components
 import { Card, Button, CardColumns } from "react-bootstrap";
@@ -22,6 +18,8 @@ class Main extends React.Component{
    this.state = {
       showInfo: false,
       redirect: false,
+      goto: false,
+      somewhere:false,
    }
  }
    setRedirect = () => {
@@ -30,14 +28,34 @@ class Main extends React.Component{
     })
   }
 
- renderRedirect = () => {
+  renderRedirect = () => {
      if (this.state.redirect) {
        return <Redirect to='/people' />
      }
    }
+ goTo = () =>{
+   this.setState({
+     goto:true
+   })
+ }
+  handleClick =() =>{
+    if (this.state.goto) {
+      return <Redirect to='/planets' />
+    }
+  }
+  goSomewhere = () =>{
+    this.setState({
+      somewhere:true
+    })
+  }
+   keyPress=() =>{
+     if (this.state.somewhere) {
+       return <Redirect to='/starships' />
+     }
+   }
+
   render(){
-    const { getPlanets } = this.props;
-    const { getStarships } = this.props;
+
     return(
       <div className="container">
            <header className="header">
@@ -48,7 +66,7 @@ class Main extends React.Component{
                  <Card.Body>
                     <Card.Title>People</Card.Title>
                     {this.renderRedirect()}
-                    <Button className="btn-style ui animated button" onClick={this.setRedirect}>
+                    <Button className="btn-style" onClick={this.setRedirect}>
                      Go somewhere
                      </Button>
                  </Card.Body>
@@ -56,13 +74,15 @@ class Main extends React.Component{
                <Card bg="danger">
               <Card.Body>
                 <Card.Title>Planets</Card.Title>
-                 <Button className="btn-style" onClick={() => getPlanets()}>Go somewhere</Button>
+                {this.handleClick()}
+                 <Button className="btn-style" onClick={this.goTo}>Go somewhere</Button>
               </Card.Body>
              </Card>
              <Card bg="warning">
               <Card.Body>
                 <Card.Title>Starships</Card.Title>
-                 <Button className="btn-style" onClick={() => getStarships()}>Go somewhere</Button>
+                 {this.keyPress()}
+                 <Button className="btn-style" onClick={this.goSomewhere}>Go somewhere</Button>
               </Card.Body>
              </Card>
           </CardColumns>
@@ -75,16 +95,4 @@ class Main extends React.Component{
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    loading: state.reducer,
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getPlanets: () => dispatch(getPlanets()),
-    getStarships: () => dispatch(getStarships()),
-  }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+export default Main;

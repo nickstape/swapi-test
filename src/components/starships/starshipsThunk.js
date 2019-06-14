@@ -6,7 +6,8 @@ export const getStarships = () => {
     dispatch(actions.getStarships());
     request.getStarships().then((response) => {
       console.log("success", response);
-      dispatch(actions.getStarshipsSuccess(response));
+      if(response.status = 200)
+        dispatch(actions.getStarshipsSuccess(response.data));
     }).catch((error) => {
       console.log("error", error);
       dispatch(actions.getStarshipsFailure(error))
