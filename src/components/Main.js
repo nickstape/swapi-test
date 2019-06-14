@@ -88,7 +88,7 @@ class Main extends React.Component{
           </CardColumns>
          <div className="tagline">
             Built and designed for Front-end Developer Test <a href="www.https://github.com/random-guys/swapi-frontend-developer-test/">on Github</a>,
-            <a href="https://swapi.co/">using the starwars Api.</a>.
+            <a href="https://swapi.co/">using the starwars Api.</a>
          </div>
       </div>
     );

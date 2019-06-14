@@ -1,7 +1,7 @@
 import React from "react";
 //import components
 import { connect } from 'react-redux';
-import {  Table, InputGroup, FormControl } from "react-bootstrap";
+import {  Table } from "react-bootstrap";
 import { getStarships } from './starshipsThunk';
 
 //stylesheet
@@ -39,11 +39,10 @@ class Starships extends React.Component{
 
     return(
      <div className="container">
-          <div className="search-bar">
-                <InputGroup className="mb-3">
-                  <FormControl placeholder="Search By" aria-describedby="basic-addon1"/>
-              </InputGroup>
-          </div>
+     <div className="search-bar">
+       <input type="text" placeholder="Search..."/>
+       <div className="search"></div>
+     </div>
             {starships.count ?
          <div className="body-container">
            <Table  responsive striped bordered hover>

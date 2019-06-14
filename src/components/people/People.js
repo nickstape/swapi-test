@@ -1,7 +1,7 @@
 import React from "react";
 //import components
 import { connect } from 'react-redux';
-import {  Table, InputGroup, FormControl } from "react-bootstrap";
+import {  Table } from "react-bootstrap";
 import { getPeople } from './peopleThunk';
 
 import Spinner from '../../components/Spinner';
@@ -67,13 +67,12 @@ class People extends React.Component{
     return(
      <div className="container">
           <div className="search-bar">
-                <InputGroup className="mb-3" onKeyDown={(e)=>{this.keyPress(e)}}>
-                  <FormControl placeholder="Search By" aria-describedby="basic-addon1"/>
-              </InputGroup>
+            <input type="text" placeholder="Search..."/>
+            <div className="search"></div>
           </div>
             {people.count ?
          <div className="body-container">
-           <Table responsive  bordered hover>
+           <Table responsive striped bordered hover>
              <thead >
                <tr>
                  <th>Id</th>

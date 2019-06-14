@@ -1,21 +1,22 @@
 @import './breakpoints';
-$card-bg: #000;
-$base-color: #000;
-$highlight-color: #d8d499;
+@import "./colors";
 $header-font: 'Lato', sans-serif;
 $body-font-size: 16px;
 
 
 body {
   font-family: $header-font;
-  background-color: $highlight-color;
+  background-color: lighten($highlight-color, 10%);
+
 }
 
 .btn-style{
   font-size: $body-font-size;
   cursor: pointer;
-  background-color: white;
-  color: black;
+  $color: black;
+  color: $color;
+  background-color: $body-bg;
+
   .btn-style:hover {
     background-color: blue;
   }
