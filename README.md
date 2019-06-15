@@ -9,11 +9,14 @@ In the project directory, you can run:
 Runs the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-### Demo
-Click Here for a [demo](https://swapi-testfront.herokuapp.com/)
+### staging area
+Click Here for a [demo] (https://mystarwar.herokuapp.com)
+## production build
+DEMO (https://mystarwar.herokuapp.com)
 
 Used the following stack:
 - React
 - Redux
+- React Bootstrap
 - Middleware
-- React Router
+- React Router e.t.c
