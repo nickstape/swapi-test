@@ -12,6 +12,9 @@ class Starships extends React.Component{
       super(props)
       this.state = { //state is by default an object
          starships: false,
+         planets: false,
+         search: '',
+         setSearch: false
 
       }
     }
@@ -20,9 +23,27 @@ class Starships extends React.Component{
       const { getStarships } = this.props;
       getStarships();
     }
+    handleChange=(e)=>{
+      this.setState({ [e.target.name]: e.target.value })
+    };
+
+    onSearch = (e) => { this.setState({ setSearch: true}) }
+
+
     renderTableData() {
-      if(this.props.starships.results.length > 0)
-        return this.props.starships.results.map((starship, data) => {
+      let { starships } = this.props;
+      let results = starships.results;
+      let { setSearch, search } = this.state;
+       try {
+         const searchRE = new RegExp(search, 'i');
+         if(setSearch) {
+           results = starships.results.filter(starship => {
+             return starships.name.match(searchRE)})
+           }
+         }
+         catch(err){ console.log(err) }
+       if(results.length > 0)
+        return results.map((starship, data) => {
          const { id, name, model, cargo_capacity } = starship //destructuring
          return (
             <tr key={data}>
@@ -40,7 +61,7 @@ class Starships extends React.Component{
     return(
      <div className="container">
      <div className="search-bar">
-       <input type="text" placeholder="Search..."/>
+      <input type="text"  name='search' value={this.state.search} onChange={this.handleChange}  placeholder='search by name, gender or sex' onKeyDown={(e) => this.onSearch(e)} />
        <div className="search"></div>
      </div>
             {starships.count ?
@@ -67,7 +88,7 @@ class Starships extends React.Component{
   }
 }
 const mapStateToProps = (state) => {
-  console.log("state", state);
+  
   return {
     loading: state.reducer.loading,
     starships: state.reducer.starships,

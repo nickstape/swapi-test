@@ -18,7 +18,8 @@ class People extends React.Component{
       super(props)
       this.state = { //state is by default an object
          people: false,
-
+         search: '',
+         setSearch: false
 
       }
     }
@@ -27,25 +28,27 @@ class People extends React.Component{
       const { getPeople } = this.props;
       getPeople();
     }
-  keyPress(e){
-    if(e.keyCode === "enter"){
-         this.setState({
-             loading: true
-         });
-         this.setState({
-             searchQuery:e.target.value
-         })
+  handleChange=(e)=>{
+    this.setState({ [e.target.name]: e.target.value })
   };
-}
 
-
-
-
-
+  onSearch = (e) => { this.setState({ setSearch: true}) }
 
   renderTableData() {
-    if(this.props.people.results.length > 0)
-      return this.props.people.results.map((person, data) => {
+    let { people } = this.props;
+    let results = people.results;
+    let { setSearch, search } = this.state;
+     try {
+       const searchRE = new RegExp(search, 'i');
+       if(setSearch) {
+         results = people.results.filter(person =>
+           (person.name.match(searchRE) || person.gender === search//after string has been fully typed
+       ))
+
+     }}
+       catch(err){ console.log(err) }
+    if(results.length > 0)
+      return results.map((person, data) => {
           const { id, name, birth_year, gender } = person //destructuring
           return (
             <tr key={data}>
@@ -62,12 +65,10 @@ class People extends React.Component{
 
   render(){
     const  { people } = this.props;
-
-
     return(
      <div className="container">
           <div className="search-bar">
-            <input type="text" placeholder="Search..."/>
+           <input type="text"  name='search' value={this.state.search} onChange={this.handleChange}  placeholder='search by name, gender or sex' onKeyDown={(e) => this.onSearch(e)} />
             <div className="search"></div>
           </div>
             {people.count ?

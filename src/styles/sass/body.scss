@@ -1,6 +1,10 @@
 @import './main';
 @import "./colors";
 
+$media:screen;
+$feature: min-width;
+$value: 320px;
+
 
 .body-container{
     max-width: 1000px;
@@ -157,4 +161,7 @@ table{
 		margin: 0 auto;
 	}
 
+}
+@media #{$media} and ($feature:$value){
+  
 }
