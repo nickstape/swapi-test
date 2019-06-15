@@ -3,8 +3,10 @@ import React from "react";
 import App from "../App";
 import { connect } from 'react-redux';
 import {  Table } from "react-bootstrap";
-import { getStarships } from './starshipsThunk';
+import { getStarships, getPage } from './starshipsThunk';
 import { Redirect } from 'react-router-dom';
+import ButtonContainer from "../ButtonContainer";
+import StarshipDetail from "./StarshipDetail";
 
 
 //stylesheet
@@ -19,9 +21,24 @@ class Starships extends React.Component{
          starships: false,
          search: '',
          redirect: false,
-         setSearch: false
-
+         setSearch: false,
+         showDetails: false,
+         starshipDetail: {}
       }
+      this.onCellClick = this.onCellClick.bind(this);
+      this.closeDetail = this.closeDetail.bind(this);
+    }
+    onCellClick(person){
+        this.setState({
+          starshipDetail: person,
+          showDetails:true
+        });
+      }
+    closeDetail(){
+      this.setState({
+        starshipDetail:{},
+        showDetails:false
+      })
     }
     setRedirect = () => {
      this.setState({
@@ -61,17 +78,26 @@ class Starships extends React.Component{
         return results.map((starship, data) => {
          const { name, model, cargo_capacity } = starship //destructuring
          return (
-            <tr key={data}>
-               <td>{starship.name}</td>
-               <td>{starship.model}</td>
-               <td>{starship.cargo_capacity}</td>
+            <tr key={data} onClick={() => this.onCellClick(starship)}>
+               <td>{name}</td>
+               <td>{model}</td>
+               <td>{cargo_capacity}</td>
             </tr>
          )
       })
    }
   render(){
     const  { starships } = this.props;
-
+    let pagination;
+    if(starships.results){
+      pagination = {
+        count: starships.count,
+        next: starships.next,
+        previous: starships.previous,
+        size: starships.results.length
+      }
+    }
+    const { showDetails, starshipDetail } = this.state;
     return(
       <div className="">
           <div className="body-head">
@@ -82,7 +108,7 @@ class Starships extends React.Component{
            </div>
           </div>
           <div className="container">
-          {starships.count ?
+          {(!showDetails && starships.count) &&
          <div className="body-container">
            <Table  responsive striped bordered hover>
              <thead>
@@ -96,10 +122,18 @@ class Starships extends React.Component{
               {this.renderTableData()}
            </tbody>
            </Table>
+           <ButtonContainer pagination={pagination} action={this.props.getStarships} getPage={this.props.getPage}/>
          </div>
-         :
-         <p>loading</p>
-         }
+       }
+       {starships.count && showDetails &&
+         <div className="body-container-new">
+           <div className="cancel" onClick={this.closeDetail}> Back to List </div>
+           <StarshipDetail starships={starshipDetail} />
+         </div>
+       }
+       {(!starships.count && !showDetails) &&
+         <p>Loading...</p>
+       }
           </div>
      </div>
     );
@@ -115,7 +149,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getStarships: () => dispatch(getStarships()),
+    getStarships: (page) => dispatch(getStarships(page)),
+    getPage: (url) => dispatch(getPage(url)),
 
   }
 }

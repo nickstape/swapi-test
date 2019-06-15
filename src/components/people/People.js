@@ -2,9 +2,10 @@ import React from "react";
 //import components
 import App from "../App";
 import ButtonContainer from "../ButtonContainer";
+import PeopleDetail from "./PeopleDetail";
 import { connect } from 'react-redux';
 import {  Table } from "react-bootstrap";
-import { getPeople } from './peopleThunk';
+import { getPeople, getPage } from './peopleThunk';
 import { Redirect } from 'react-router-dom';
 
 
@@ -20,32 +21,44 @@ class People extends React.Component{
          people: false,
          redirect: false,
          search: '',
-         setSearch: false
-
+         setSearch: false,
+         showDetails: false,
+         peopleDetail: {}
       }
+      this.onCellClick = this.onCellClick.bind(this);
+      this.closeDetail = this.closeDetail.bind(this);
+    }
+    onCellClick(person){
+        this.setState({
+          peopleDetail: person,
+          showDetails:true
+        });
+      }
+    closeDetail(){
+      this.setState({
+        peopleDetail:{},
+        showDetails:false
+      })
     }
     setRedirect = () => {
      this.setState({
        redirect: true
      })
     }
-
     renderRedirect = () => {
       if (this.state.redirect) {
         return <Redirect to='/' />
       }
     }
-  componentDidMount = () => {
+    componentDidMount = () => {
       const { getPeople } = this.props;
       getPeople();
     }
-  handleChange=(e)=>{
+    handleChange=(e)=>{
     this.setState({ [e.target.name]: e.target.value })
   };
-
-  onSearch = (e) => { this.setState({ setSearch: true}) }
-
-  renderTableData() {
+    onSearch = (e) => { this.setState({ setSearch: true}) }
+    renderTableData() {
     let { people } = this.props;
     let results = people.results;
     let { setSearch, search } = this.state;
@@ -62,19 +75,26 @@ class People extends React.Component{
       return results.map((person, data) => {
           const { name, birth_year, gender } = person //destructuring
           return (
-            <tr key={data}>
-               <td>{person.name}</td>
-               <td>{person.birth_year}</td>
-               <td>{person.gender}</td>
+            <tr key={data} onClick={() => this.onCellClick(person)}>
+               <td>{name}</td>
+               <td>{birth_year}</td>
+               <td>{gender}</td>
             </tr>
          )
         })
     }
-
-
-
   render(){
     const  { people } = this.props;
+    let pagination;
+    if(people.results){
+      pagination = {
+        count: people.count,
+        next: people.next,
+        previous: people.previous,
+        size: people.results.length
+      }
+    }
+    const { showDetails, peopleDetail } = this.state;
     return(
      <div className="">
          <div className="body-head">
@@ -85,7 +105,7 @@ class People extends React.Component{
            </div>
          </div>
          <div className="container">
-             {people.count ?
+             {(!showDetails && people.count) &&
              <div className="body-container">
                <Table responsive striped bordered hover>
                  <thead >
@@ -99,11 +119,18 @@ class People extends React.Component{
                 {this.renderTableData()}
               </tbody>
               </Table>
-              <ButtonContainer />
+              <ButtonContainer pagination={pagination} action={this.props.getPeople} getPage={this.props.getPage}/>
              </div>
-                :
-                <p>loading</p>
-                }
+           }
+           {people.count && showDetails &&
+             <div className="body-container-new">
+               <div className="cancel" onClick={this.closeDetail}> Back to List </div>
+               <PeopleDetail people={peopleDetail} />
+             </div>
+           }
+           {(!people.count && !showDetails) &&
+             <p>Loading...</p>
+           }
          </div>
      </div>
     );
@@ -118,7 +145,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getPeople: () => dispatch(getPeople()),
+    getPeople: (page) => dispatch(getPeople(page)),
+    getPage: (url) => dispatch(getPage(url)),
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(People);

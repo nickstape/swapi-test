@@ -16,6 +16,10 @@ $value: 320px;
     transition: all .3s;
 
 }
+.body-container-new{
+  font-size: 14px;
+  font-family: $header-font;
+}
 /*STYLING FOR TABLE*/
 table{
   border-collapse: collapse;
@@ -23,6 +27,7 @@ table{
   padding: 0;
   width: 100%;
   table-layout: fixed;
+  cursor: pointer;
   thead{
     background-color: #95A5A6;
     font-size: 14px;

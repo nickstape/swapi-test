@@ -3,8 +3,10 @@ import React from "react";
 import App from "../App";
 import { connect } from 'react-redux';
 import {  Table } from "react-bootstrap";
-import { getPlanets } from './planetsThunk';
+import { getPlanets, getPage } from './planetsThunk';
 import { Redirect } from 'react-router-dom';
+import ButtonContainer from "../ButtonContainer";
+import PlanetDetail from "./PlanetDetails";
 
 
 //stylesheet
@@ -20,8 +22,24 @@ class Planets extends React.Component{
          planets: false,
          search: '',
          redirect: false,
-         setSearch: false
+         setSearch: false,
+         showDetails: false,
+         planetsDetail: {}
       }
+      this.onCellClick = this.onCellClick.bind(this);
+      this.closeDetail = this.closeDetail.bind(this);
+    }
+    onCellClick(planet){
+        this.setState({
+          planetsDetail: planet,
+          showDetails:true
+        });
+      }
+    closeDetail(){
+      this.setState({
+        planetsDetail:{},
+        showDetails:false
+      })
     }
     setRedirect = () => {
      this.setState({
@@ -62,10 +80,10 @@ class Planets extends React.Component{
       return results.map((planet, data) => {
           const { name, climate, population } = planet //destructuring
           return (
-            <tr key={data}>
-               <td>{planet.name}</td>
-               <td>{planet.climate}</td>
-               <td>{planet.population}</td>
+            <tr key={data} onClick={() => this.onCellClick(planet)}>
+               <td>{name}</td>
+               <td>{climate}</td>
+               <td>{population}</td>
             </tr>
          )
         })
@@ -75,6 +93,16 @@ class Planets extends React.Component{
 
   render(){
     const  { planets } = this.props;
+    let pagination;
+    if(planets.results){
+      pagination = {
+        count: planets.count,
+        next: planets.next,
+        previous: planets.previous,
+        size: planets.results.length
+      }
+    }
+    const { showDetails, planetsDetail } = this.state;
     return(
      <div className="">
          <div className="body-head">
@@ -85,7 +113,7 @@ class Planets extends React.Component{
           </div>
          </div>
           <div className="container">
-           {planets.count ?
+           {(!showDetails && planets.count) &&
            <div className="body-container">
              <Table responsive  bordered hover>
                <thead >
@@ -99,9 +127,17 @@ class Planets extends React.Component{
                  {this.renderTableData()}
                  </tbody>
              </Table>
+             <ButtonContainer pagination={pagination} action={this.props.getPlanets} getPage={this.props.getPage}/>
            </div>
-         :
-         <p>loading</p>
+            }
+         {planets.count && showDetails &&
+           <div className="body-container-new">
+             <div className="cancel" onClick={this.closeDetail}> Back to List </div>
+             <PlanetDetail planets={planetsDetail} />
+           </div>
+           }
+         {(!planets.count && !showDetails) &&
+           <p>Loading...</p>
          }
           </div>
      </div>
@@ -117,7 +153,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getPlanets: () => dispatch(getPlanets()),
+    getPlanets: (page) => dispatch(getPlanets(page)),
+    getPage: (url) => dispatch(getPage(url)),
 
   }
 }
