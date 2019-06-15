@@ -1,29 +1,40 @@
 import React from "react";
 //import components
+import App from "../App";
+import ButtonContainer from "../ButtonContainer";
 import { connect } from 'react-redux';
 import {  Table } from "react-bootstrap";
 import { getPeople } from './peopleThunk';
+import { Redirect } from 'react-router-dom';
 
-import Spinner from '../../components/Spinner';
 
 //stylesheet
 import "../../styles/sass/body.scss";
+import "../../styles/sass/search.scss";
 
-function cellFormatter(cell) {
-    return (!cell ? <Spinner /> : `${cell}`);
-}
 
 class People extends React.Component{
   constructor(props) {
       super(props)
       this.state = { //state is by default an object
          people: false,
+         redirect: false,
          search: '',
          setSearch: false
 
       }
     }
+    setRedirect = () => {
+     this.setState({
+       redirect: true
+     })
+    }
 
+    renderRedirect = () => {
+      if (this.state.redirect) {
+        return <Redirect to='/' />
+      }
+    }
   componentDidMount = () => {
       const { getPeople } = this.props;
       getPeople();
@@ -49,10 +60,9 @@ class People extends React.Component{
        catch(err){ console.log(err) }
     if(results.length > 0)
       return results.map((person, data) => {
-          const { id, name, birth_year, gender } = person //destructuring
+          const { name, birth_year, gender } = person //destructuring
           return (
             <tr key={data}>
-               <td>{person.id}</td>
                <td>{person.name}</td>
                <td>{person.birth_year}</td>
                <td>{person.gender}</td>
@@ -66,31 +76,35 @@ class People extends React.Component{
   render(){
     const  { people } = this.props;
     return(
-     <div className="container">
-          <div className="search-bar">
-           <input type="text"  name='search' value={this.state.search} onChange={this.handleChange}  placeholder='search by name, gender or sex' onKeyDown={(e) => this.onSearch(e)} />
-            <div className="search"></div>
-          </div>
-            {people.count ?
-         <div className="body-container">
-           <Table responsive striped bordered hover>
-             <thead >
-               <tr>
-                 <th>Id</th>
-                 <th>FullName</th>
-                 <th>Birth Year</th>
-                 <th>Gender</th>
-               </tr>
-               </thead>
-               <tbody>
-               {this.renderTableData()}
-               </tbody>
-           </Table>
-
+     <div className="">
+         <div className="body-head">
+           <App />
+           <div className="search-bar">
+             <input type="text"  name='search' value={this.state.search} onChange={this.handleChange}  placeholder='search by name & gender' onKeyDown={(e) => this.onSearch(e)} />
+             <div className="search"></div>
+           </div>
          </div>
-       :
-       <p>loading</p>
-     }
+         <div className="container">
+             {people.count ?
+             <div className="body-container">
+               <Table responsive striped bordered hover>
+                 <thead >
+                   <tr>
+                     <th>FullName</th>
+                     <th>Birth Year</th>
+                    <th>Gender</th>
+                  </tr>
+               </thead>
+              <tbody>
+                {this.renderTableData()}
+              </tbody>
+              </Table>
+              <ButtonContainer />
+             </div>
+                :
+                <p>loading</p>
+                }
+         </div>
      </div>
     );
   }
@@ -105,7 +119,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getPeople: () => dispatch(getPeople()),
-
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(People);
